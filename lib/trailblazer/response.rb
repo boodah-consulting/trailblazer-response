@@ -1,44 +1,19 @@
-ENV['RACK_ENV'] = 'test'
+require 'forwardable'
+require 'trailblazer/response/builder'
+require 'trailblazer/response/active_model'
 
-require 'database_cleaner-mongoid'
-require 'simplecov'
-require 'pry'
+module Trailblazer
+  module Response
+    include Trailblazer::Response::Builder
 
-module SimpleCov::Configuration
-  def clean_filters
-    @filters = []
-  end
-end
+    class << self
+      extend Forwardable
 
-SimpleCov.configure do
-  clean_filters
-  load_adapter 'test_frameworks'
+      def_delegators :'Trailblazer::Response::Configuration',
+        :configure, :config
 
-  add_filter ".rvm"
-  add_filter "vendor"
-  add_filter 'spec'
-end
-
-SimpleCov.start 'rails'
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-
-require 'rspec'
-require 'n-vyro'
-
-# Requires supporting files with custom matchers and macros, etc,
-# in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
-
-RSpec.configure do |config|
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
+      def_delegators :'Trailblazer::Response::Configuration',
+        :mappers
     end
   end
 end
