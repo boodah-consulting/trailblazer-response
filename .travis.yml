@@ -17,7 +17,7 @@ jobs:
   - stage: unit
     language: ruby
     rvm:
-    - 2.5.7
+    - 3.0.0
     cache: bundler
     before_script:
       - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -26,7 +26,7 @@ jobs:
     after_script:
       - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
     script:
-    - bundle exec rake
+    - bundle exec rspec
 
   - stage: release
     language:
