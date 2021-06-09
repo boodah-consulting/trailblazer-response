@@ -150,4 +150,3 @@ RSpec.describe Trailblazer::Response::Merger do
     end
   end
 end
-
