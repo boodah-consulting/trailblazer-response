@@ -60,25 +60,23 @@ RSpec.describe Trailblazer::Response::Builder do
 
     it 'returns the response' do
       expect(builder.build(result: result)).to eql(
-        HashWithIndifferentAccess.new(
-          {
-            active_model_object: nil,
-            errors: [
-              {
-                attribute: 'name',
-                messages: [
-                  'can\'t be blank'
-                ]
-              },
-              {
-                attribute: 'email',
-                messages: [
-                  'can\'t be blank'
-                ]
-              }
-            ]
-          }
-        )
+        {
+          active_model_object: nil,
+          errors: [
+            {
+              attribute: 'name',
+              messages: [
+                'can\'t be blank'
+              ]
+            },
+            {
+              attribute: 'email',
+              messages: [
+                'can\'t be blank'
+              ]
+            }
+          ]
+        }.with_indifferent_access
       )
     end
   end

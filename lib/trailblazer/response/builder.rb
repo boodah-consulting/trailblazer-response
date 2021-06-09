@@ -12,12 +12,10 @@ module Trailblazer
           extracted_response = collect(result)
           response = merge(extracted_response)
 
-          HashWithIndifferentAccess.new(
-            {
-              response[:name] => response[:entity].as_json,
-              errors: response[:errors].as_json
-            }
-          )
+          {
+            response[:name] => response[:entity].as_json,
+            errors: response[:errors].as_json
+          }.with_indifferent_access
         end
       end
 

@@ -48,26 +48,24 @@ RSpec.describe Trailblazer::Response::Merger do
 
     context 'when there is only a active model response' do
       let(:expected) do
-        HashWithIndifferentAccess.new(
-          {
-            name: "active_model_object",
-            errors: [
-              {
-                attribute: "name",
-                messages: [
-                  "can't be blank"
-                ]
-              },
-              {
-                attribute: "email",
-                messages: [
-                  "can't be blank"
-                ]
-              }
-            ],
-            entity: nil
-          }
-        )
+        {
+          name: "active_model_object",
+          errors: [
+            {
+              attribute: "name",
+              messages: [
+                "can't be blank"
+              ]
+            },
+            {
+              attribute: "email",
+              messages: [
+                "can't be blank"
+              ]
+            }
+          ],
+          entity: nil
+        }.with_indifferent_access
       end
 
       it 'has the expected response body' do
@@ -112,32 +110,30 @@ RSpec.describe Trailblazer::Response::Merger do
       end
 
       let(:expected) do
-        HashWithIndifferentAccess.new(
-          {
-            "name"=>"active_model_object",
-            "errors"=>[
-              {
-                "attribute"=>"name",
-                "messages"=>[
-                  "can't be blank"
-                ]
-              },
-              {
-                "attribute"=>"email",
-                "messages"=>[
-                  "can't be blank"
-                ]
-              },
-              {
-                "attribute"=>"something-broken",
-                "messages"=>[
-                  "some error; concatenated with another error; and another one"
-                ]
-              }
-            ],
-            "entity"=>nil
-          }
-        )
+        {
+          "name"=>"active_model_object",
+          "errors"=>[
+            {
+              "attribute"=>"name",
+              "messages"=>[
+                "can't be blank"
+              ]
+            },
+            {
+              "attribute"=>"email",
+              "messages"=>[
+                "can't be blank"
+              ]
+            },
+            {
+              "attribute"=>"something-broken",
+              "messages"=>[
+                "some error; concatenated with another error; and another one"
+              ]
+            }
+          ],
+          "entity"=>nil
+        }.with_indifferent_access
       end
 
       before :each do

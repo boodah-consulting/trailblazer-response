@@ -1,5 +1,3 @@
-require 'active_support/core_ext/hash/indifferent_access'
-
 module Trailblazer
   module Response
     module ActiveModel
@@ -13,10 +11,12 @@ module Trailblazer
         end
 
         def as_json(options={})
-            {
-              attribute: attribute,
-              messages: messages
-            }.as_json(options)
+          {
+            attribute: attribute,
+            messages: messages
+          }
+            .as_json(options)
+            .with_indifferent_access
         end
       end
     end

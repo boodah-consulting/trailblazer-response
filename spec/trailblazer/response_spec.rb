@@ -49,15 +49,14 @@ RSpec.describe Trailblazer::Response do
         end
 
         it 'returns the expected hash result' do
-          expected = HashWithIndifferentAccess.new(
-            {
-              active_model_object: {
-                name: 'Joe Bloggs',
-                email: 'me@example.com'
-              },
-              errors: []
-            }
-          )
+          expected = {
+            active_model_object: {
+              name: 'Joe Bloggs',
+              email: 'me@example.com'
+            },
+            errors: []
+          }.with_indifferent_access
+
           allow(result)
             .to receive(:'success?')
             .and_return true
@@ -79,21 +78,19 @@ RSpec.describe Trailblazer::Response do
         end
 
         it 'returns an expected response' do
-          expected = HashWithIndifferentAccess.new(
-            {
-              active_model_object: nil,
-              errors: [
-                {
-                  attribute: 'name',
-                  messages: [ "can't be blank" ]
-                },
-                {
-                  attribute: 'email',
-                  messages: [ "can't be blank" ]
-                }
-              ]
-            }
-          )
+          expected = {
+            active_model_object: nil,
+            errors: [
+              {
+                attribute: 'name',
+                messages: [ "can't be blank" ]
+              },
+              {
+                attribute: 'email',
+                messages: [ "can't be blank" ]
+              }
+            ]
+          }.with_indifferent_access
 
           expect(response.build(result: result)).to eql expected
         end
@@ -162,28 +159,26 @@ RSpec.describe Trailblazer::Response do
 
       it 'has the expected result format' do
         expect(response).to eql(
-          HashWithIndifferentAccess.new(
-            {
-              active_model_object: nil,
-              errors: [
-                {
-                  attribute: 'name',
-                  messages: [ "can't be blank" ]
-                },
-                {
-                  attribute: 'email',
-                  messages: [ "can't be blank" ]
-                },
-                {
-                  attribute: 'something-broken',
-                  messages: [
-                    'some error; concatenated with another error; and another one'
-                  ]
-                }
-              ]
+          {
+            active_model_object: nil,
+            errors: [
+              {
+                attribute: 'name',
+                messages: [ "can't be blank" ]
+              },
+              {
+                attribute: 'email',
+                messages: [ "can't be blank" ]
+              },
+              {
+                attribute: 'something-broken',
+                messages: [
+                  'some error; concatenated with another error; and another one'
+                ]
+              }
+            ]
 
-            }
-          )
+          }.with_indifferent_access
         )
       end
     end

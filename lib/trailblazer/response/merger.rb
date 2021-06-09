@@ -5,20 +5,18 @@ module Trailblazer
         def merge(collection)
           return {} if collection.empty?
 
-          hashes = 
-            collection
-            .map(&:as_json)
+          hashes = collection
+            .as_json
+            .map(&:with_indifferent_access)
 
-          errors = hashes.map { |h| h['errors']  }.flatten
+          errors = hashes.map { |h| h[:errors]  }.flatten
 
           hashes = hashes
             .inject(&:merge)
 
-          hashes['errors'] = errors.is_a?(Array) && errors.present? ? errors : []
+          hashes[:errors] = errors.is_a?(Array) && errors.present? ? errors : []
 
-          HashWithIndifferentAccess.new(
-            hashes
-          )
+          hashes
         end
       end
 
