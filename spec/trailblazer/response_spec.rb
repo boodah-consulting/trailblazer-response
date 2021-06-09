@@ -167,6 +167,14 @@ RSpec.describe Trailblazer::Response do
               active_model_object: nil,
               errors: [
                 {
+                  attribute: 'name',
+                  messages: [ "can't be blank" ]
+                },
+                {
+                  attribute: 'email',
+                  messages: [ "can't be blank" ]
+                },
+                {
                   attribute: 'something-broken',
                   messages: [
                     'some error; concatenated with another error; and another one'
