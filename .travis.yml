@@ -1,0 +1,48 @@
+language: ruby
+
+rvm:
+- 3.0.0
+
+env:
+  global:
+  - CC_TEST_REPORTER_ID=99dff75cf556af2eddd2428c118d9aee4539d59d8af04d9757cb60f973dfba77
+  
+stages:
+- name: unit
+- name: release
+  if: (branch IN (main, next, beta, alpha) OR branch =~ /(\d+)\.(\d+|x)\.x/) AND type != pull_request
+
+jobs:
+  include:
+  - stage: unit
+    language: ruby
+    rvm:
+    - 2.5.7
+    cache: bundler
+    before_script:
+      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - chmod +x ./cc-test-reporter
+      - ./cc-test-reporter before-build
+    after_script:
+      - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+    script:
+    - bundle exec rake
+
+  - stage: release
+    language:
+    - node_js
+    node_js: lts/*
+    script: skip
+    deploy:
+      provider: script
+      skip_cleanup: true
+      script:
+      - npx semantic-release
+      on:
+        branch:
+        - "/+([0-9])?(.{+([0-9]),x}).x/"
+        - alpha
+        - beta
+        - main
+        - next
+        - next-major

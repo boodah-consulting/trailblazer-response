@@ -1,0 +1,16 @@
+{
+  "name": "trailblazer-response",
+  "version": "0.0.1",
+  "summary": "A standardised way of handling Trailblazer::Operation results",
+  "author": [
+    "Yomi Colledge"
+  ],
+  "private": true,
+  "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/exec": "5.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "semantic-release": "^17.1.1",
+    "semantic-release-rubygem": "^1.0.3"
+  }
+}
