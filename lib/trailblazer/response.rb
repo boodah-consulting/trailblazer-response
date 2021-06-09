@@ -1,6 +1,8 @@
 require 'forwardable'
-require 'trailblazer/response/builder'
+
+require 'trailblazer/response/base'
 require 'trailblazer/response/active_model'
+require 'trailblazer/response/builder'
 require 'trailblazer/response/output'
 
 module Trailblazer
