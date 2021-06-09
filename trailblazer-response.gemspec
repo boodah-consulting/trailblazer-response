@@ -4,19 +4,17 @@
 # -*- encoding: utf-8 -*-
 # stub: trailblazer-response 0.0.1 ruby lib
 
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
-require "trailblazer-response"
+require "./lib/trailblazer/response/version"
 
 Gem::Specification.new do |s|
   s.name = "trailblazer-response".freeze
   s.version = Trailblazer::Response::VERSION
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Yomi Colledge".freeze]
   s.date = "2021-06-09"
   s.description = "Standardising Trailblazer::Operation results".freeze
+  s.summary = "Standardising Trailblazer::Operation results".freeze
   s.email = "baphled@boodah.net".freeze
   s.extra_rdoc_files = [
     "LICENSE",
@@ -58,7 +56,7 @@ Gem::Specification.new do |s|
     s.add_development_dependency(%q<bundler>.freeze, ["= 2.2.19"])
     s.add_development_dependency(%q<json>.freeze, [">= 2.3.0"])
     s.add_development_dependency(%q<rspec>.freeze, [">= 3.10.0"])
-    s.add_development_dependency(%q<juwelier>.freeze, ["~> 2.1.0"])
+    s.add_development_dependency(%q<juwelier>.freeze, ["~> 2.4.9"])
     s.add_development_dependency(%q<simplecov>.freeze, [">= 0.21.2"])
   else
     s.add_dependency(%q<trailblazer>.freeze, [">= 2.1.0"])
@@ -69,7 +67,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>.freeze, ["= 2.2.19"])
     s.add_dependency(%q<json>.freeze, [">= 2.3.0"])
     s.add_dependency(%q<rspec>.freeze, [">= 3.10.0"])
-    s.add_dependency(%q<juwelier>.freeze, ["~> 2.1.0"])
+    s.add_dependency(%q<juwelier>.freeze, ["~> 2.4.9"])
     s.add_dependency(%q<simplecov>.freeze, [">= 0.21.2"])
   end
 end

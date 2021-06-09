@@ -11,13 +11,17 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 require 'juwelier'
+
+require "./lib/trailblazer/response/version"
+
 Juwelier::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "trailblazer-response"
   gem.homepage = "http://github.com/baphled/trailblazer-response"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.license = "GPLv3"
+  gem.version = Trailblazer::Response::VERSION
+  gem.summary = %Q{Standardising Trailblazer::Operation results}
+  gem.description = %Q{Standardising Trailblazer::Operation results}
   gem.email = "baphled@boodah.net"
   gem.authors = ["Yomi Colledge"]
 

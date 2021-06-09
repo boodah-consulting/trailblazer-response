@@ -3,7 +3,6 @@ require 'active_model'
 require 'active_model_serializers'
 require 'trailblazer'
 
-
 module Trailblazer
   module Response
     class << self
