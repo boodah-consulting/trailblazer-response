@@ -13,8 +13,8 @@ gem 'active_model_serializers', '~> 0.10.0'
 group :development do
   gem "pry"
   gem "bundler", "2.2.19"
+  gem "json", ">= 2.3.0"
   gem "rspec", ">= 0"
-  gem "rdoc", "~> 3.12"
   gem "juwelier", "~> 2.1.0"
   gem "simplecov", ">= 0"
 end
