@@ -10,20 +10,6 @@ require 'simplecov'
 
 require 'trailblazer-response.rb'
 
-module SimpleCov::Configuration
-  def clean_filters
-    @filters = []
-  end
-end
-
-SimpleCov.configure do
-  clean_filters
-  load_adapter 'test_frameworks'
-
-  add_group 'Libraries', 'lib'
-  add_filter 'spec'
-end
-
 SimpleCov.start
 
 # Requires supporting files with custom matchers and macros, etc,
