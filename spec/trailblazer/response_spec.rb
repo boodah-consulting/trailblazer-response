@@ -99,7 +99,7 @@ RSpec.describe Trailblazer::Response do
           expect(response.build(result: result)[:errors].count).to eql 2
         end
 
-        describe 'errors' do
+        describe 'and the operation has errors' do
           subject(:response) { described_class.build(result: result) }
 
           it 'is an Array' do
@@ -107,10 +107,15 @@ RSpec.describe Trailblazer::Response do
           end
 
           context 'a single type of error' do
-            subject(:errors) { response[:errors] }
+            subject(:error) { response[:errors].first }
 
-            it 'has an attribute'
-            it 'has an array of messages'
+            it 'has an attribute' do
+              expect(error[:attribute]).to eql('name')
+            end
+
+            it 'has an array of messages' do
+              expect(error[:messages]).to be_an(Array)
+            end
           end
         end
       end
@@ -181,11 +186,6 @@ RSpec.describe Trailblazer::Response do
           }.with_indifferent_access
         )
       end
-    end
-
-    context 'when there are general errors' do
-      it 'can access the correct errors'
-      it 'has the expected result format'
     end
   end
 end

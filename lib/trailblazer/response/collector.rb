@@ -1,8 +1,8 @@
 module Trailblazer
   module Response
     module Collector
-      module ClassMethods
-        def collect(result)
+      class << self
+        def run(result)
           Trailblazer::Response.mappers.map do |mapper|
             model = result[mapper[:name]]
             klass = "#{mapper[:klass]}::Model".constantize
@@ -10,10 +10,6 @@ module Trailblazer
             klass.new(model: model)
           end
         end
-      end
-
-      def self.included(receiver)
-        receiver.extend         ClassMethods
       end
     end
   end

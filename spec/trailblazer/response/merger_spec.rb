@@ -1,11 +1,7 @@
 require "spec_helper"
 
-class DummyMerger
-  include Trailblazer::Response::Merger
-end
-
 RSpec.describe Trailblazer::Response::Merger do
-  subject(:merger) { DummyMerger }
+  subject(:merger) { described_class }
 
   let(:model) do
     ActiveModelObject.new()
@@ -41,7 +37,7 @@ RSpec.describe Trailblazer::Response::Merger do
     end
   end
 
-  describe '.merge' do
+  describe '.run' do
     before :each do
       model.valid?
     end
@@ -69,7 +65,7 @@ RSpec.describe Trailblazer::Response::Merger do
       end
 
       it 'has the expected response body' do
-        expect(merger.merge(collection).as_json).to eql(expected)
+        expect(merger.run(collection).as_json).to eql(expected)
       end
     end
 
@@ -145,7 +141,7 @@ RSpec.describe Trailblazer::Response::Merger do
       end
 
       it 'has the expected response body' do
-        expect(merger.merge(collection).as_json).to eql(expected)
+        expect(merger.run(collection).as_json).to eql(expected)
       end
     end
   end

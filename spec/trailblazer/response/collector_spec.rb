@@ -1,11 +1,7 @@
 require "spec_helper"
 
-class DummyCollector
-  include Trailblazer::Response::Collector
-end
-
 RSpec.describe Trailblazer::Response::Collector do
-  subject(:collector) { DummyCollector }
+  subject(:collector) { described_class }
 
   let(:result) do
     TestOperation.call(params, context: { current_user: stubbed_user })
@@ -35,13 +31,13 @@ RSpec.describe Trailblazer::Response::Collector do
     end
   end
 
-  describe '.collect' do
+  describe '.run' do
     it 'calles the response mappers' do
       expect(Trailblazer::Response)
         .to receive(:mappers)
         .and_return(mappers)
 
-      collector.collect(result)
+      collector.run(result)
     end
 
     context 'when there is only a active model response' do
@@ -69,7 +65,7 @@ RSpec.describe Trailblazer::Response::Collector do
       end
 
       it 'has the expected response body' do
-        expect(collector.collect(result).as_json).to eql(expected)
+        expect(collector.run(result).as_json).to eql(expected)
       end
     end
 
@@ -125,7 +121,7 @@ RSpec.describe Trailblazer::Response::Collector do
       end
 
       it 'has the expected response body' do
-        expect(collector.collect(result).as_json).to eql(expected)
+        expect(collector.run(result).as_json).to eql(expected)
       end
     end
   end

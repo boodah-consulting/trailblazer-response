@@ -1,9 +1,6 @@
 require "spec_helper"
 
 class DummyBuilder
-  include Trailblazer::Response::Collector
-  include Trailblazer::Response::Merger
-
   include Trailblazer::Response::Builder
 end
 
@@ -40,20 +37,27 @@ RSpec.describe Trailblazer::Response::Builder do
     end
 
     it 'calls the collector' do
-      expect(builder)
-        .to receive(:collect)
+      expect(Trailblazer::Response::Collector)
+        .to receive(:run)
         .and_return([])
 
       builder.build(result: result)
     end
 
     it 'calls the merger' do
-      allow(builder)
-        .to receive(:collect)
+      allow(Trailblazer::Response::Collector)
+        .to receive(:run)
         .and_return([])
 
-      expect(builder)
-        .to receive(:collect)
+      expect(Trailblazer::Response::Merger)
+        .to receive(:run)
+        .and_return(
+          {
+            name: 'foo',
+            entity: nil,
+            errors: []
+          }
+        )
 
       builder.build(result: result)
     end
