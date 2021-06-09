@@ -20,12 +20,11 @@ SimpleCov.configure do
   clean_filters
   load_adapter 'test_frameworks'
 
-  add_filter ".rvm"
-  add_filter "vendor"
+  add_group 'Libraries', 'lib'
   add_filter 'spec'
 end
 
-SimpleCov.start 'rails'
+SimpleCov.start
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
