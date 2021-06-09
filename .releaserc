@@ -1,0 +1,44 @@
+{
+  "branches": [
+    "+([0-9])?(.{+([0-9]),x}).x",
+    "main",
+    "next",
+    "next-major",
+    {
+      "name": "beta",
+      "prerelease": true
+    },
+    {
+      "name": "alpha",
+      "prerelease": true
+    }
+  ],
+  plugins: [
+    '@semantic-release/commit-analyzer',
+    '@semantic-release/release-notes-generator',
+    '@semantic-release/changelog',
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd: "sed -i 's/n-vyro-core-ruby (.*)/n-vyro-core-ruby (${nextRelease.version})/g' Gemfile.lock; sed -i 's/\"version\": \".*\"/\"version\": \"${nextRelease.version}\"/g' package.json",
+        successCmd: 'touch .trigger-rubygem-release'
+      }
+    ],
+    [
+      'semantic-release-rubygem',
+      {
+        updateGemfileLock: false,
+        gemPublish: false
+      }
+    ],
+    [
+      '@semantic-release/git',
+      {
+        // eslint-disable-next-line no-template-curly-in-string
+        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+        assets: ['package-lock.json', 'package.json', 'CHANGELOG.md', 'lib/**/version.rb', 'Gemfile', 'Gemfile.lock']
+      }
+    ],
+    '@semantic-release/github'
+  ]
+}
