@@ -55,7 +55,7 @@ RSpec.describe Trailblazer::Response::Base::Model do
         it 'throws an exception if name and entity attributes are not set' do
           expect {
             ResponseWithModelAndNoEntity.new(model: model)
-          }.to raise_error(Trailblazer::Response::Exceptions::IncompleteResponseDefinition)
+          }.to raise_error(Trailblazer::Response::Exceptions::IncompleteResponseModel)
         end
       end
 
