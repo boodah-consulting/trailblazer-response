@@ -1,0 +1,191 @@
+require "spec_helper"
+
+RSpec.describe Trailblazer::Response do
+  subject(:response) { described_class }
+  let(:stubbed_user) { TestUser.new }
+
+  let(:mappers) do
+    [
+      {
+        name: 'model',
+        klass: Trailblazer::Response::ActiveModel
+      }
+    ]
+  end
+
+  before :each do
+    described_class.config do |c|
+      c.mappers = mappers
+    end
+  end
+
+  describe '.build' do
+    let(:params) do
+      {
+        name: nil,
+        email: nil
+      }
+    end
+
+    it 'requires a result as an argument' do
+      expect{
+        result = TestOperation.call(params, context: { current_user: stubbed_user })
+
+        response.build(result: result)
+      }.to_not raise_error
+    end
+
+    context 'when using an active model' do
+      context 'when the operation is successful' do
+        let(:result) do
+          TestOperation.call(params, context: { current_user: stubbed_user })
+        end
+
+        let(:params) do
+          {
+            name: 'Joe Bloggs',
+            email: 'me@example.com'
+          }
+        end
+
+        it 'returns the expected hash result' do
+          expected = {
+            active_model_object: {
+              name: 'Joe Bloggs',
+              email: 'me@example.com'
+            },
+            errors: []
+          }.with_indifferent_access
+
+          allow(result)
+            .to receive(:'success?')
+            .and_return true
+
+          expect(response.build(result: result)).to eql expected
+        end
+      end
+
+      context 'when the operation is not successful' do
+        let(:result) do
+          TestOperationWithFailingContract.call(params, context: { current_user: stubbed_user })
+        end
+
+        let(:params) do
+          {
+            name: nil,
+            email: nil
+          }
+        end
+
+        it 'returns an expected response' do
+          expected = {
+            active_model_object: nil,
+            errors: [
+              {
+                attribute: 'name',
+                messages: [ "can't be blank" ]
+              },
+              {
+                attribute: 'email',
+                messages: [ "can't be blank" ]
+              }
+            ]
+          }.with_indifferent_access
+
+          expect(response.build(result: result)).to eql expected
+        end
+
+        it 'has errors' do
+          expect(response.build(result: result)[:errors].count).to eql 2
+        end
+
+        describe 'and the operation has errors' do
+          subject(:response) { described_class.build(result: result) }
+
+          it 'is an Array' do
+            expect(response[:errors]).to be_an Array
+          end
+
+          context 'a single type of error' do
+            subject(:error) { response[:errors].first }
+
+            it 'has an attribute' do
+              expect(error[:attribute]).to eql('name')
+            end
+
+            it 'has an array of messages' do
+              expect(error[:messages]).to be_an(Array)
+            end
+          end
+        end
+      end
+    end
+
+    context 'when using a custom error message format' do
+      subject(:response) { described_class.build(result: result) }
+
+      let(:result) do
+        TestOperationWithFailingContract.call(params, context: { current_user: stubbed_user })
+      end
+
+      before :each do
+        result['model'].valid?
+
+        described_class.config do |c|
+          c.mappers = mappers
+        end
+      end
+
+      let(:mappers) do
+        [
+          {
+            name: 'model',
+            klass: Trailblazer::Response::ActiveModel
+          },
+          {
+            name: 'contract.default',
+            klass: Trailblazer::Response::ContractDefault
+          }
+        ]
+      end
+
+      let(:default_contract_errors) do 
+        {
+          attribute: 'something-broken',
+          messages: [
+            'some error; concatenated with another error; and another one'
+          ]
+        }
+      end
+
+      it 'can access the correct errors' do
+        expect(response[:errors]).to include(default_contract_errors)
+      end
+
+      it 'has the expected result format' do
+        expect(response).to eql(
+          {
+            active_model_object: nil,
+            errors: [
+              {
+                attribute: 'name',
+                messages: [ "can't be blank" ]
+              },
+              {
+                attribute: 'email',
+                messages: [ "can't be blank" ]
+              },
+              {
+                attribute: 'something-broken',
+                messages: [
+                  'some error; concatenated with another error; and another one'
+                ]
+              }
+            ]
+
+          }.with_indifferent_access
+        )
+      end
+    end
+  end
+end

@@ -14,10 +14,64 @@ encapsulate them inside of coherent response objects, relating to the specific t
 manipulate.
 
 
-```
-  Trailblazer::Response::ActiveModel.build(result)
+The examples below are only for conceptual context, the next piece would be to define this configuration object to
+handle multiple response objects.
 
-  results['model'] = {
+## Examples
+
+### Configuration of Response Objects
+```ruby
+
+  Trailblazer::Response.config do |config|
+    config.response_objects = {
+      model: ActiveModelResponseObject,
+      'contract.default': ActiveRecordResponseObject,
+      general_errors: OperationsResponseObject
+    }
+  end
+```
+
+### Execution of response builder
+
+```ruby
+  class TestUser
+    include ActiveModel::Model
+    include ActiveModel::Validations
+
+    attr_accessor :name
+    attr_accessor :email
+
+    attr_accessor :role
+    attr_accessor :position
+  end
+
+  class ActiveModelObject < ActiveModelSerializers::Model
+    include ActiveModel::Validations
+
+    attributes :name, :email
+
+    validates_presence_of :name
+    validates_presence_of :email
+  end
+
+  class TestOperation < Trailblazer::Operation
+    step :model
+    step :validation
+
+    def model(ctx, context:, **params)
+      ctx[:model] = ActiveModelObject.new(params)
+    end
+
+    def validation(ctx, **)
+      ctx[:model].valid?
+    end
+  end
+
+  user = TestUser.new 
+  result = TestOperation.call(params, context: { current_user: user })
+  response = Trailblazer::Response.build(result)
+
+  response = {
     user: {
       first_name: 'Joe',
       last_name: 'Bloggs',
@@ -28,37 +82,6 @@ manipulate.
       }
     }
   }
-
-  response = Trailblazer::Response::CustomHandler.build(result)
-  p response
-  > {
-      user: {
-        first_name: 'Joe',
-        last_name: 'Bloggs',
-        position: 'Boss',
-        profile: {
-          hobbies: 'Cooking',
-          interests: 'Reading'
-        }
-      },
-      error: [
-        {
-          attribute: 'first_name',
-          messages: [
-            'already taken',
-          ]
-        },
-        {
-          attribute: 'profile',
-          messages: [
-            'too cool to publish',
-            'incomplete'
-          ]
-        }
-      ]
-    }
-
-  Trailblazer::Response::GeneralHandler.build(result)
 ```
 
 ## Contributing to trailblazer-response
